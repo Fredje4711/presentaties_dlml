@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>DLML Intro Presentatie - Cinematic (MP4 + Canva embed)</title>
+  <style>
+    :root{
+      --accent:#00b4d8;
+      --text:#e0e0e0;
+      --card-bg:rgba(255,255,255,0.07);
+      --bg:#0b0e14;
+      --muted:#9aa4b2;
+    }
+
+    body{
+      font-family:'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background-color:var(--bg);
+      color:var(--text);
+      margin:0; padding:0;
+      display:flex; flex-direction:column;
+      min-height:100vh;
+      overflow:hidden;
+    }
+
+    /* Start Overlay */
+    #overlay{
+      position:fixed; top:0; left:0; width:100%; height:100%;
+      background:var(--bg);
+      display:flex; flex-direction:column; justify-content:center; align-items:center;
+      z-index:9999;
+    }
+
+    #startBtn{
+      padding:20px 60px; font-size:1.6rem;
+      background:linear-gradient(135deg,#0077b6,#00b4d8);
+      color:white; border:none; border-radius:50px;
+      cursor:pointer; font-weight:bold;
+      box-shadow:0 0 20px rgba(0,180,216,0.4);
+      transition:all 0.3s ease;
+      letter-spacing:2px;
+    }
+    #startBtn:hover{ transform:scale(1.05); box-shadow:0 0 30px rgba(0,180,216,0.6); }
+
+    header{
+      padding:20px 0 10px 0;
+      text-align:center;
+      background:linear-gradient(to bottom, rgba(0,0,0,0.5), transparent);
+    }
+    header h1{ margin:0; font-size:1.8rem; color:#fff; letter-spacing:2px; font-weight:300; }
+    header .sub{ font-size:0.95rem; color:var(--muted); margin-top:6px; letter-spacing:0.5px; }
+
+    .container{
+      max-width:1500px; width:94%; margin:0 auto;
+      flex-grow:1; display:flex; flex-direction:column; gap:14px;
+    }
+
+    /* Controls */
+    .controls{
+      display:flex; justify-content:center; align-items:center;
+      gap:12px; margin-top:4px;
+      flex-wrap:wrap;
+      user-select:none;
+    }
+    .pill{
+      appearance:none;
+      border:1px solid rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.05);
+      color:var(--text);
+      padding:10px 16px;
+      border-radius:999px;
+      cursor:pointer;
+      letter-spacing:0.8px;
+      font-weight:700;
+      font-size:0.9rem;
+      transition:transform .15s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease;
+      white-space:nowrap;
+    }
+    .pill:hover{ transform:translateY(-1px); border-color:rgba(0,180,216,0.6); box-shadow:0 10px 24px rgba(0,0,0,0.25); }
+    .pill.active{
+      background:linear-gradient(135deg, rgba(0,119,182,0.55), rgba(0,180,216,0.55));
+      border-color:rgba(0,180,216,0.7);
+      box-shadow:0 0 0 3px rgba(0,180,216,0.14);
+    }
+
+    /* Stage */
+    .stage{
+      width:100%;
+      border-radius:15px;
+      overflow:hidden;
+      box-shadow:0 20px 50px rgba(0,0,0,0.5);
+      border:1px solid rgba(255,255,255,0.1);
+      background:#000;
+      position:relative;
+    }
+
+    /* Video wrapper: zelfde 16:9 als Canva */
+.video-wrap{
+  position:relative;
+  width:100%;
+  height:0;
+  padding-top:56.25%; /* 16:9 */
+  background:#000;
+}
+
+.video-wrap video{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  background:#000;
+}
+
+
+    /* Canva embed wrapper: keep 16:9 and match stage height feel */
+    .canva-wrap{
+      position:relative;
+      width:100%;
+      height:0;
+      padding-top:56.25%; /* 16:9 */
+      display:none;
+      background:#000;
+    }
+    .canva-wrap iframe{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      border:0;
+      background:#000;
+    }
+
+    /* Small helper bar shown only in Canva mode */
+    .helperbar{
+      display:none;
+      margin-top:10px;
+      text-align:center;
+      color:var(--muted);
+      font-size:0.9rem;
+    }
+    .helperbar a{
+      color:var(--accent);
+      text-decoration:none;
+      font-weight:700;
+    }
+    .helperbar a:hover{ text-decoration:underline; }
+
+    .content-grid{
+      display:grid; grid-template-columns:1fr;
+      gap:16px; margin-bottom:20px;
+    }
+    .glass-card{
+      background:var(--card-bg);
+      backdrop-filter:blur(10px);
+      padding:18px 22px; border-radius:15px;
+      border:1px solid rgba(255,255,255,0.1);
+    }
+    .glass-card h2{
+      margin:0 0 10px 0; font-size:1.05rem; color:var(--accent);
+      text-transform:uppercase; border-left:4px solid var(--accent); padding-left:12px;
+      letter-spacing:1px;
+    }
+    .glass-card p{ font-size:0.95rem; line-height:1.6; color:#ccc; margin:0; }
+
+    footer{
+      padding:10px; text-align:center; font-size:0.8rem; color:#555;
+      border-top:1px solid rgba(255,255,255,0.05);
+    }
+
+    @media (max-width: 980px){
+      body{ overflow:auto; }
+      video{ max-height:none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="overlay">
+    <button id="startBtn">START PRESENTATIE</button>
+    <p style="margin-top: 20px; color: #444; letter-spacing: 1px;">DIABETES LIGA MIDDEN-LIMBURG</p>
+  </div>
+
+  <header>
+    <h1>DLML INTRO PRESENTATIE <span style="font-weight:800; color:var(--accent);">1080p</span></h1>
+    <div class="sub" id="modeLabel">Video — Tekst verschijnt</div>
+  </header>
+
+  <div class="container">
+
+    <div class="controls" aria-label="Presentatie modus selectie">
+      <button class="pill active" id="btnVid1" type="button">MP4 (TEKST VERSCHIJNT)</button>
+      <button class="pill" id="btnVid2" type="button">MP4 (ALS PPTX)</button>
+      <button class="pill" id="btnCanva" type="button">PPTX</button>
+    </div>
+
+    <div class="video-wrap" id="videoWrap">
+  <video id="v" controls loop playsinline>
+    <source id="videoSource" src="Presentatie-DLML-tekstverschijnen.mp4" type="video/mp4" />
+  </video>
+</div>
+
+
+      <div class="canva-wrap" id="canvaWrap" aria-label="Canva embed">
+        <iframe
+          id="canvaFrame"
+          loading="lazy"
+          allowfullscreen="allowfullscreen"
+          allow="fullscreen"
+          referrerpolicy="no-referrer-when-downgrade"
+          src="https://www.canva.com/design/DAG9Sx6V5mM/V733w1WaQjTJAeX_1YZAZw/view?embed">
+        </iframe>
+      </div>
+    </div>
+
+    <div class="helperbar" id="helperbar">
+      Lukt de Canva-weergave niet in deze browser? Open dan rechtstreeks:
+      <a id="canvaDirect" href="https://www.canva.com/design/DAG9Sx6V5mM/V733w1WaQjTJAeX_1YZAZw/view" target="_blank" rel="noopener">Canva presentatie</a>
+    </div>
+
+    </div>
+
+  <script>
+    const CANVA_EMBED_URL  = "https://www.canva.com/design/DAG9Sx6V5mM/V733w1WaQjTJAeX_1YZAZw/view?embed";
+    const CANVA_DIRECT_URL = "https://www.canva.com/design/DAG9Sx6V5mM/V733w1WaQjTJAeX_1YZAZw/view";
+
+    const modes = {
+      vid1: {
+        label: "Video — Tekst verschijnt",
+        type: "video",
+        src: "Presentatie-DLML-tekstverschijnen.mp4"
+      },
+      vid2: {
+        label: "Video — als PPTX",
+        type: "video",
+        src: "DLML-Intro Presentatie-pptx-1080p.mp4"
+      },
+      canva: {
+        label: "Canva — PPTX",
+        type: "canva"
+      }
+    };
+
+    const overlay = document.getElementById('overlay');
+    const startBtn = document.getElementById('startBtn');
+
+    const video = document.getElementById('v');
+    const videoSource = document.getElementById('videoSource');
+	const videoWrap = document.getElementById('videoWrap');
+
+
+    const canvaWrap = document.getElementById('canvaWrap');
+    const canvaFrame = document.getElementById('canvaFrame');
+
+    const modeLabel = document.getElementById('modeLabel');
+
+    const btnVid1 = document.getElementById('btnVid1');
+    const btnVid2 = document.getElementById('btnVid2');
+    const btnCanva = document.getElementById('btnCanva');
+
+    const helperbar = document.getElementById('helperbar');
+    const canvaDirect = document.getElementById('canvaDirect');
+
+    canvaDirect.href = CANVA_DIRECT_URL;
+
+    let presentationStarted = false;
+
+    function setActive(activeBtn){
+      [btnVid1, btnVid2, btnCanva].forEach(b => b.classList.remove('active'));
+      activeBtn.classList.add('active');
+    }
+
+    function showVideo(key){
+      const cfg = modes[key];
+      modeLabel.textContent = cfg.label;
+
+      helperbar.style.display = "none";
+      canvaWrap.style.display = "none";
+videoWrap.style.display = "block";
+
+
+      video.pause();
+      videoSource.src = cfg.src;
+      video.load();
+      video.currentTime = 0;
+
+      if (presentationStarted){
+        video.play().catch(() => {});
+      }
+    }
+
+    function showCanva(){
+      modeLabel.textContent = modes.canva.label;
+
+      // stop video
+      video.pause();
+videoWrap.style.display = "none";
+
+
+      // show canva
+      canvaWrap.style.display = "block";
+      helperbar.style.display = "block";
+
+      // ensure correct URL (some browsers keep state)
+      if (canvaFrame.src !== CANVA_EMBED_URL) canvaFrame.src = CANVA_EMBED_URL;
+    }
+
+    function switchMode(key){
+      if (key === "canva"){
+        showCanva();
+        setActive(btnCanva);
+        return;
+      }
+
+      showVideo(key);
+      if (key === "vid1") setActive(btnVid1);
+      if (key === "vid2") setActive(btnVid2);
+    }
+
+    startBtn.addEventListener('click', function(){
+      const e = document.documentElement;
+      if (e.requestFullscreen) e.requestFullscreen().catch(() => {});
+      else if (e.webkitRequestFullscreen) e.webkitRequestFullscreen();
+
+      overlay.style.display = 'none';
+      presentationStarted = true;
+
+      setTimeout(() => {
+        if (video.style.display !== 'none') video.play().catch(() => {});
+      }, 150);
+    });
+
+    btnVid1.addEventListener('click', () => switchMode('vid1'));
+    btnVid2.addEventListener('click', () => switchMode('vid2'));
+    btnCanva.addEventListener('click', () => switchMode('canva'));
+
+    document.addEventListener('keydown', (ev) => {
+      if (ev.key === '1') switchMode('vid1');
+      if (ev.key === '2') switchMode('vid2');
+      if (ev.key === '3') switchMode('canva');
+    });
+  </script>
+</body>
+</html>
